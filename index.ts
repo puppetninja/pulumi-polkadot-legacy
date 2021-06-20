@@ -24,7 +24,25 @@ const clusterConfig: digitalocean.KubernetesClusterArgs = {
         nodeCount: 3,
     },
 }
-
 const cluster = new digitalocean.KubernetesCluster(clusterName, clusterConfig);
+
+// Create K8S LB
+const lbName = "midl-polkadot-lb";
+const lbArgs: digitalocean.LoadBalancerArgs = {
+    region: digitalocean.Region.AMS3,
+    forwardingRules: [{
+        entryPort: 30333,
+        entryProtocol: "tcp",
+        targetPort: 30333,
+        targetProtocol: "tcp",
+    },
+    {
+        entryPort: 30334,
+        entryProtocol: "tcp",
+        targetPort: 30334,
+        targetProtocol: "tcp",
+    }]
+}
+const lb = new digitalocean.LoadBalancer(lbName, lbArgs);
 
 export const vpcname = vpc.name;

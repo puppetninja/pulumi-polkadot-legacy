@@ -1,0 +1,24 @@
+version: v1beta9
+deployments:
+  - name: chain
+    helm:
+      chart:
+        name: ./charts/polkadot
+      valuesFiles:
+        - ./${CHAIN_NAME}_values.yaml
+
+images:
+  polkadot_node_key_configurator:
+    image: polkadot_node_key_configurator
+    dockerfile: ./polkadot-node-key-configurator/Dockerfile
+    context: ./polkadot-node-key-configurator
+  polkadot_archive_downloader:
+    image: polkadot_archive_downloader
+    dockerfile: ./polkadot-archive-downloader/Dockerfile
+    context: ./polkadot-archive-downloader
+
+vars:
+  - name: CHAIN_NAME
+    question: Name of the chain as passed to generate-constants
+    default: "devspace"
+    source: env
